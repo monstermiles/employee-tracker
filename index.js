@@ -23,7 +23,7 @@ function startPrompts() {
                 type: 'list',
                 name: 'start',
                 message: 'Chose an option.',
-                choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department']
+                choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role']
             }
         ])
         .then(data => {
@@ -38,6 +38,9 @@ function startPrompts() {
             }
             if (data.start === 'Add a department') {
                 addDepartment()
+            }
+            if (data.start === 'Add a role') {
+                addRole()
             }
         })
 }
@@ -103,6 +106,41 @@ function addDepartment() {
                 } else {
                     console.log(`${newDepartmentName} has been added to the database.`)
                     viewDepartmentList();
+                }
+            }
+            )
+        })
+}
+
+
+function addRole() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'What is the namne of the new role?',
+                name: 'newRoleName'
+            },
+            {
+                type: 'input',
+                message: 'What is the salary for the new role?',
+                name: 'newRoleSalary'
+            },
+            {
+                type: 'input',
+                message: 'What is the department ID of the new role?',
+                name: 'newRoleDeptID'
+            }
+        ])
+        .then(data => {
+            const newRoleData = [data.newRoleName, data.newRoleSalary, data.newRoleDeptID]
+            db.query('INSERT INTO roles (title,salary, department_id) VALUES (?, ?, ?)', newRoleData, (err, results) => {
+                if (err) {
+                    console.error(err)
+                    startPrompts();
+                } else {
+                    console.log(`${data.newRoleName} has been added to the database.`)
+                    viewRolesList();
                 }
             }
             )
