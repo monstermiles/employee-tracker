@@ -23,7 +23,7 @@ function startPrompts() {
                 type: 'list',
                 name: 'start',
                 message: 'Chose an option.',
-                choices: ['View all departments', 'View all roles']
+                choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department']
             }
         ])
         .then(data => {
@@ -33,8 +33,16 @@ function startPrompts() {
             if (data.start === 'View all roles') {
                 viewRolesList()
             }
+            if (data.start === 'View all employees') {
+                viewEmployeeList()
+            }
+            if (data.start === 'Add a department') {
+                addDepartment()
+            }
         })
 }
+
+
 
 function viewDepartmentList() {
     db.query('SELECT * FROM departments', function (err, results) {
@@ -61,6 +69,47 @@ function viewRolesList() {
         }
     })
 }
+
+
+function viewEmployeeList() {
+    db.query('SELECT * FROM employees', function (err, results) {
+        if (err) {
+            console.error(err)
+            startPrompts();
+        } else {
+            console.table(results)
+            startPrompts();
+        }
+    })
+}
+
+
+
+function addDepartment() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'What is the namne of the new department?',
+                name: 'newDepartment'
+            }
+        ])
+        .then(data => {
+            const newDepartmentName = data.newDepartment;
+            db.query('INSERT INTO departments (department_name) VALUES (?)', newDepartmentName, (err, results) => {
+                if (err) {
+                    console.error(err)
+                    startPrompts();
+                } else {
+                    console.log(`${newDepartmentName} has been added to the database.`)
+                    viewDepartmentList();
+                }
+            }
+            )
+        })
+}
+
+
 
 
 
