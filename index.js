@@ -23,12 +23,15 @@ function startPrompts() {
                 type: 'list',
                 name: 'start',
                 message: 'Chose an option.',
-                choices: ['View departments list']
+                choices: ['View all departments', 'View all roles']
             }
         ])
         .then(data => {
-            if (data.start === 'View departments list') {
+            if (data.start === 'View all departments') {
                 viewDepartmentList()
+            }
+            if (data.start === 'View all roles') {
+                viewRolesList()
             }
         })
 }
@@ -37,11 +40,28 @@ function viewDepartmentList() {
     db.query('SELECT * FROM departments', function (err, results) {
         if (err) {
             console.error(err)
+            startPrompts();
         } else {
-            console.log(results)
+            console.table(results)
+            startPrompts();
+        }
+    })
+
+}
+
+
+function viewRolesList() {
+    db.query('SELECT * FROM roles', function (err, results) {
+        if (err) {
+            console.error(err)
+            startPrompts();
+        } else {
+            console.table(results)
+            startPrompts();
         }
     })
 }
+
 
 
 startPrompts();
