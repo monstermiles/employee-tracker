@@ -23,7 +23,7 @@ function startPrompts() {
                 type: 'list',
                 name: 'start',
                 message: 'Chose an option.',
-                choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role']
+                choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee']
             }
         ])
         .then(data => {
@@ -41,6 +41,9 @@ function startPrompts() {
             }
             if (data.start === 'Add a role') {
                 addRole()
+            }
+            if (data.start === 'Add an employee') {
+                addEmployee()
             }
         })
 }
@@ -149,6 +152,44 @@ function addRole() {
 
 
 
+function addEmployee() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: "What is the new employee's first name?",
+                name: 'newEmployeeFirstName'
+            },
+            {
+                type: 'input',
+                message: "What is the new employee's last name?",
+                name: 'newEmployeeLastName'
+            },
+            {
+                type: 'input',
+                message: "What is the new employee's role ID?",
+                name: 'newEmployeeRoleID'
+            },
+            {
+                type: 'input',
+                message: "What is the employee ID for the new employee's manager?",
+                name: 'newEmployeeManager'
+            },
+        ])
+        .then(data => {
+            const newEmployeeData = [data.newEmployeeFirstName, data.newEmployeeLastName, data.newEmployeeRoleID, data.newEmployeeManager]
+            db.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', newEmployeeData, (err, results) => {
+                if (err) {
+                    console.error(err)
+                    startPrompts();
+                } else {
+                    console.log(`${data.newEmployeeFirstName} ${data.newEmployeeLastName} has been added to the database.`)
+                    viewEmployeeList();
+                }
+            }
+            )
+        })
+}
 
 
 startPrompts();
