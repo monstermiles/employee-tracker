@@ -23,7 +23,7 @@ function startPrompts() {
                 type: 'list',
                 name: 'start',
                 message: 'Chose an option.',
-                choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee']
+                choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role']
             }
         ])
         .then(data => {
@@ -44,6 +44,9 @@ function startPrompts() {
             }
             if (data.start === 'Add an employee') {
                 addEmployee()
+            }
+            if (data.start === 'Update an employee role') {
+                updateEmployeeRole()
             }
         })
 }
@@ -116,12 +119,28 @@ function addDepartment() {
 }
 
 
+// const departments = []
+// function choseDepartment() {
+//     db.query('SELECT department_name FROM departments', function (err, results) {
+//         if (err) console.error(err);
+//         else { 
+//             for (var i = 0; i < results.length; i++) {
+//                 departments.push(results[i].department_name)
+//             }
+//             departments.push(new inquirer.Separator())
+//         }
+//         return departments;
+//      })
+// }
+
+
+
 function addRole() {
     inquirer
         .prompt([
             {
                 type: 'input',
-                message: 'What is the namne of the new role?',
+                message: 'What is the name of the new role?',
                 name: 'newRoleName'
             },
             {
@@ -130,8 +149,10 @@ function addRole() {
                 name: 'newRoleSalary'
             },
             {
+                // type: 'list',
                 type: 'input',
                 message: 'What is the department ID of the new role?',
+                // choices: choseDepartment(),
                 name: 'newRoleDeptID'
             }
         ])
@@ -190,6 +211,49 @@ function addEmployee() {
             )
         })
 }
+
+
+
+function updateEmployeeRole() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: "What is the id of the employee you want to update?",
+                name: 'employeeToUpdate'
+            },
+            {
+                type: 'input',
+                message: "What is the role id for the employee's new position?",
+                name: 'newRoleID'
+            },
+            // {
+            //     type: 'input',
+            //     message: "What is the id for the employee's new manager?",
+            //     name: 'newManager'
+            // }
+        ])
+        .then(data => {
+            const updateRoleData = [data.newRoleID, data.newManager, data.employeeToUpdate]
+            db.query('UPDATE employees SET role_id = ? WHERE id = ? ', updateRoleData, (err, results) => {
+                if (err) {
+                    console.error(err)
+                    startPrompts();
+                } else {
+                    console.log(`Employee has been updated.`)
+                    viewEmployeeList();
+                }
+            }
+            )
+        })
+}
+
+
+
+
+
+
+
 
 
 startPrompts();
