@@ -147,7 +147,7 @@ function addRole() {
                     startPrompts();
                 } else {
                     const newRoleData = [data.newRoleName, data.newRoleSalary, data.newRoleDepartment]
-                    db.query('INSERT INTO roles (title ,salary, department_id) VALUES (?, ?, ?)', newRoleData , (err, results) => {
+                    db.query('INSERT INTO roles (title ,salary, department_id) VALUES (?, ?, ?)', newRoleData, (err, results) => {
                         if (err) {
                             console.error(err)
                             startPrompts();
@@ -159,8 +159,8 @@ function addRole() {
                     )
                 }
             })
-            
-           
+
+
         })
 }
 
@@ -227,17 +227,32 @@ function updateEmployeeRole() {
             }
         ])
         .then(data => {
-            const updateRoleData = [data.newRoleID, data.newManager, data.employeeToUpdate, ]
-            db.query('UPDATE employees SET role_id = ?, manager_id = ? WHERE employee_id = ? ', updateRoleData, (err, results) => {
-                if (err) {
-                    console.error(err)
-                    startPrompts();
-                } else {
-                    console.log(`Employee has been updated.`)
-                    viewEmployeeList();
+            if (data.newManager) {
+                const updateRoleData = [data.newRoleID, data.newManager, data.employeeToUpdate,]
+                db.query('UPDATE employees SET role_id = ?, manager_id = ? WHERE id = ? ', updateRoleData, (err, results) => {
+                    if (err) {
+                        console.error(err)
+                        startPrompts();
+                    } else {
+                        console.log(`Employee has been updated.`)
+                        viewEmployeeList();
+                    }
                 }
+                )
+            } else {
+                const updateRoleData = [data.newRoleID, null, data.employeeToUpdate,]
+                db.query('UPDATE employees SET role_id = ?, manager_id = ? WHERE id = ? ', updateRoleData, (err, results) => {
+                    if (err) {
+                        console.error(err)
+                        startPrompts();
+                    } else {
+                        console.log(`Employee has been updated.`)
+                        viewEmployeeList();
+                    }
+                }
+                )
+                
             }
-            )
         })
 }
 
