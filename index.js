@@ -119,19 +119,24 @@ function addDepartment() {
 }
 
 
-// const departments = []
-// function choseDepartment() {
-//     db.query('SELECT department_name FROM departments', function (err, results) {
-//         if (err) console.error(err);
-//         else { 
-//             for (var i = 0; i < results.length; i++) {
-//                 departments.push(results[i].department_name)
-//             }
-//             departments.push(new inquirer.Separator())
-//         }
-//         return departments;
-//      })
-// }
+let departments = []
+function choseDepartment() {
+    db.query('SELECT department_name FROM departments', function (err, results) {
+        if (err) console.error(err);
+        else { 
+            // console.log(results);
+            // console.log(results.length);
+            for (var i = 0; i < results.length; i++) {
+                departments.push(results[i].department_name)
+                // console.log(results[i].department_name)
+            }
+            // console.log(departments)
+        }
+        return departments;
+     })
+}
+
+choseDepartment();
 
 
 
@@ -149,25 +154,32 @@ function addRole() {
                 name: 'newRoleSalary'
             },
             {
-                // type: 'list',
                 type: 'input',
-                message: 'What is the department ID of the new role?',
-                // choices: choseDepartment(),
-                name: 'newRoleDeptID'
+                message: 'Enter the department ID for the new role.',
+                name: 'newRoleDepartment'
             }
         ])
         .then(data => {
-            const newRoleData = [data.newRoleName, data.newRoleSalary, data.newRoleDeptID]
-            db.query('INSERT INTO roles (title,salary, department_id) VALUES (?, ?, ?)', newRoleData, (err, results) => {
+            db.query('SELECT id FROM departments WHERE department_name = ?', data.newRoleDepartment, (err, results) => {
                 if (err) {
                     console.error(err)
                     startPrompts();
                 } else {
-                    console.log(`${data.newRoleName} has been added to the database.`)
-                    viewRolesList();
+                    const newRoleData = [data.newRoleName, data.newRoleSalary, data.newRoleDepartment]
+                    db.query('INSERT INTO roles (title ,salary, department_id) VALUES (?, ?, ?)', newRoleData , (err, results) => {
+                        if (err) {
+                            console.error(err)
+                            startPrompts();
+                        } else {
+                            console.log(`${data.newRoleName} has been added to the database.`)
+                            viewRolesList();
+                        }
+                    }
+                    )
                 }
-            }
-            )
+            })
+            
+           
         })
 }
 

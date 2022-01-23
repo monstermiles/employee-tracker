@@ -1,10 +1,9 @@
 -- I know I should have done this in a more condensed format, but i got this mock data from https://www.mockaroo.com/ and I just copied and pasted it in the format it gave me
 
-insert into departments (department_name) values ('Human Resources');1
-insert into departments (department_name) values ('Accounting');2
-insert into departments (department_name) values ('Research and Development');3
-insert into departments (department_name) values ('Sales');4
---good
+insert into departments (department_name) values ('Human Resources');
+insert into departments (department_name) values ('Accounting');
+insert into departments (department_name) values ('Research and Development');
+insert into departments (department_name) values ('Sales');
 
 
 insert into roles (department_id, title, salary) values (3, 'Graphic Designer', '67000.00');
@@ -20,7 +19,6 @@ insert into roles (department_id, title, salary) values (4, 'Sales Manager', '10
 insert into roles (department_id, title, salary) values (1, 'Human Resource Manager', '107000.');
 insert into roles (department_id, title, salary) values (2, 'Head of Accounting', '98000.00');
 
---good
 
 
 
