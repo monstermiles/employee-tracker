@@ -119,25 +119,6 @@ function addDepartment() {
 }
 
 
-let departments = []
-function choseDepartment() {
-    db.query('SELECT department_name FROM departments', function (err, results) {
-        if (err) console.error(err);
-        else { 
-            // console.log(results);
-            // console.log(results.length);
-            for (var i = 0; i < results.length; i++) {
-                departments.push(results[i].department_name)
-                // console.log(results[i].department_name)
-            }
-            // console.log(departments)
-        }
-        return departments;
-     })
-}
-
-choseDepartment();
-
 
 
 function addRole() {
@@ -239,15 +220,15 @@ function updateEmployeeRole() {
                 message: "What is the role id for the employee's new position?",
                 name: 'newRoleID'
             },
-            // {
-            //     type: 'input',
-            //     message: "What is the id for the employee's new manager?",
-            //     name: 'newManager'
-            // }
+            {
+                type: 'input',
+                message: "What is the id for the employee's new manager?",
+                name: 'newManager'
+            }
         ])
         .then(data => {
-            const updateRoleData = [data.newRoleID, data.newManager, data.employeeToUpdate]
-            db.query('UPDATE employees SET role_id = ? WHERE id = ? ', updateRoleData, (err, results) => {
+            const updateRoleData = [data.newRoleID, data.newManager, data.employeeToUpdate, ]
+            db.query('UPDATE employees SET role_id = ?, manager_id = ? WHERE employee_id = ? ', updateRoleData, (err, results) => {
                 if (err) {
                     console.error(err)
                     startPrompts();
