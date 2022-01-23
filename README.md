@@ -16,7 +16,7 @@
       This is a CLI app that allows you to keep track of departments, roles, and employees within a company. It uses Node.js and Inquirer to lead the user through a series of questions and then updates the database with the given information. 
 
         Demo video:   https://drive.google.com/file/d/1sXzX4EL0ywUoF5q74M7s8A-imJuhRSPN/view?usp=sharing
-        Github repo:  
+        Github repo:  https://github.com/monstermiles/employee-tracker
      
 
         employee-tracker/img/Screen Shot 2022-01-23 at 5.29.43 PM.png
